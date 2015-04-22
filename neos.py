@@ -34,9 +34,7 @@ f = open("output", "w")
 f.write(xml_input)
 
 
-print neos.ping()
 (jobNumber, password) = neos.submitJob(xml_input)
-print("JobNumber = %d\n" % jobNumber)
 if jobNumber == 0:
     print password
 offset = 0
@@ -46,12 +44,9 @@ status = ""
 while status != "Done":
     (msg, offset) = neos.getIntermediateResults(jobNumber, password, offset)
 
-    print(msg.data)
     status = neos.getJobStatus(jobNumber, password)
-    print status
 
 #Print out the final result
 msg = neos.getFinalResults(jobNumber, password).data
-print type(msg)
-
-sys.stdout.write(msg)
+print msg
+#sys.stdout.write(msg)
