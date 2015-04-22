@@ -1,0 +1,10 @@
+# Command file to train and test  SVM 
+# Created by Kristin Benentt, March 2015.
+#Solve SVM Model
+solve;
+
+# Display Solutions  weights, bias, and objective
+display w;
+display b;
+
+

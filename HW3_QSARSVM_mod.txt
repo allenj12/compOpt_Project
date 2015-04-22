@@ -1,0 +1,28 @@
+#CONSTANTS
+param p;  # number of predictor variables
+param n;  # number of observations
+param c;  # SVM model parameter
+
+set P:={1..p}; # indices of predictor variables
+set N:={1..n}; # indices of observations   
+
+param X{N,P};  # obervation data 
+param Y{N};    # classes of each observation (1 or -1) 
+
+#VARIABILEs of model 
+var w{P};
+var b;
+var z{N};
+
+#OBJECTIVE FUNCTION for  SVM classification model 
+
+minimize objective:
+c*sum{i in N} z[i] + sum{j in P} w[j]*w[j] ;
+
+#CONSTRAINTS
+subject to trainerror {i in N}:
+  Y[i]*( sum {j in P} X[i,j]*w[j]-b ) + z[i]  >= 1;
+subject to slack {i in N}:
+z[i] >= 0;
+
+
