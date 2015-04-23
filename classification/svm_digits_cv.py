@@ -74,13 +74,9 @@ def classify(pt, alpha, b, X_train, Y_train):
 
 train_file = "ZipDigits.train.txt"
 train_data = open(train_file, 'r')
-train_out_file = "train_out.txt"
-train_out_data = open(train_out_file, 'w')
 
 test_file = "ZipDigits.test.txt"
 test_data = open(test_file, 'r')
-test_out_file = "test_out.txt"
-test_out_data = open(test_out_file, 'w')
 
 images = []
 tests = []
