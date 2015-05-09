@@ -69,14 +69,14 @@ def construct_alpha_constraints(y, C):
 
 
 def train_svm_kernel(X, y, C, K):
-    solvers.options['show_progress'] = True
+    solvers.options['show_progress'] = False
     N = y.shape[0]
     G = matrix(construct_G(X, y, K))
-    print("Constructed G")
+    #print("Constructed G")
     ones = matrix(-1.0, (N, 1))
     Y = matrix(np.array(y))
     coefficients, constraints = construct_alpha_constraints(y, C)
-    print("Constructed constraints")
+    #print("Constructed constraints")
     coeff = matrix(coefficients)
     constr = matrix(constraints)
     #print("G.size = %r" % (G.size,))
@@ -85,7 +85,7 @@ def train_svm_kernel(X, y, C, K):
     #print("constr.size = %r" % (constr.size,))
     #print("Y.T.size = %r" % (Y.T.size,))
     a = solvers.qp(P=G, q=ones, G=coeff, h=constr, A=Y.T, b=matrix(0.0))['x']
-    print("Solved qp")
+    #print("Solved qp")
     alpha =  np.array(a)
     s = -1
     for i in range(0, N):
@@ -104,22 +104,21 @@ def train_svm_kernel(X, y, C, K):
 
 def error(X, y, X_train, y_train, alpha, b, K):
     e = 0.0
-    d = alpha.shape[0]
     N = 1.0 * y.shape[0]
     alpha_mask = alpha <= 0
     alpha_masked = np.ma.MaskedArray(alpha, alpha_mask)
     summation = np.zeros((X.shape[0]))
-    print summation.shape
+    #print summation.shape
     kernel = K(X, X_train.T)
     new_alpha = (alpha_masked.T * y_train).T
-    print kernel.shape
-    print new_alpha.shape
-    print np.dot(kernel, new_alpha).shape
+    #print kernel.shape
+    #print new_alpha.shape
+    #print np.dot(kernel, new_alpha).shape
     summation += np.dot(kernel, new_alpha).flatten()
     summation += b
     err = np.sign(summation) != y
-    print np.sign(summation)
-    print y
+    #print np.sign(summation)
+    #print y
     e = np.sum(err)
     final_e = e / N
     return final_e
