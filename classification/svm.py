@@ -107,7 +107,7 @@ def error(X, y, X_train, y_train, alpha, b, K):
     for n in range(0, d):
         summation += np.ma.dot(np.multiply(y_train, K(X_train, X)), alpha_masked)
     summation += b
-    err = summation[np.sign(summation) != y]
-    e = err.shape[0]
+    err = np.logical_not(np.equal(np.sign(summation), y))
+    e = np.sum(err)
     final_e = e / N
     return final_e
