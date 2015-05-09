@@ -48,11 +48,13 @@ def train_svm(X, y):
 
 
 def construct_G(X, y, K):
-    N = y.shape[0]
-    G = np.zeros((N, N))
-    for n in range(0, N):
-        for m in range(0, N):
-            G[n, m] = y[n] * y[m] * K(X[n], X[m])
+    y_vector = np.array([y])
+    G = np.multiply(np.dot(y_vector.T, y_vector), K(X, X.T))
+    #N = y.shape[0]
+    #G = np.zeros((N, N))
+    #for n in range(0, N):
+    #    for m in range(0, N):
+    #        G[n, m] = y[n] * y[m] * K(X[n], X[m])
     return G
 
 
@@ -67,12 +69,14 @@ def construct_alpha_constraints(y, C):
 
 
 def train_svm_kernel(X, y, C, K):
-    solvers.options['show_progress'] = False
+    solvers.options['show_progress'] = True
     N = y.shape[0]
     G = matrix(construct_G(X, y, K))
+    print("Constructed G")
     ones = matrix(-1.0, (N, 1))
-    Y = matrix(y)
+    Y = matrix(np.array(y))
     coefficients, constraints = construct_alpha_constraints(y, C)
+    print("Constructed constraints")
     coeff = matrix(coefficients)
     constr = matrix(constraints)
     #print("G.size = %r" % (G.size,))
@@ -81,6 +85,7 @@ def train_svm_kernel(X, y, C, K):
     #print("constr.size = %r" % (constr.size,))
     #print("Y.T.size = %r" % (Y.T.size,))
     a = solvers.qp(P=G, q=ones, G=coeff, h=constr, A=Y.T, b=matrix(0.0))['x']
+    print("Solved qp")
     alpha =  np.array(a)
     s = -1
     for i in range(0, N):
