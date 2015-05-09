@@ -12,14 +12,16 @@ print("Loaded NN")
 
 all_data = np.loadtxt("combinedData.txt")
 target = all_data[:, 0]
-target[target != 1] = -1
+target_value = 1
+target[target != target_value] = -1
+target[target == target_value] = 1
 pixel_info = all_data[:, 1:]
 
 train_target = target[:300]
 train_info = pixel_info[:300]
 
-test_target = target[7500:]
-test_info = pixel_info[7500:]
+test_target = target[300:]
+test_info = pixel_info[300:]
 print("Loaded info")
 
 #cuts the last layer off of ann making the net that makes the features
@@ -40,5 +42,4 @@ print("Simulated test info")
 
 alpha, b = svm.train_svm_kernel(train_features, train_target, C=0.06, K=kernel)
 
-print alpha
-print b
+print svm.error(test_features, test_target, train_features, train_target, alpha, b, kernel)

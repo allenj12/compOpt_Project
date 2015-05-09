@@ -105,14 +105,21 @@ def train_svm_kernel(X, y, C, K):
 def error(X, y, X_train, y_train, alpha, b, K):
     e = 0.0
     d = alpha.shape[0]
-    N = y.shape[0]
+    N = 1.0 * y.shape[0]
     alpha_mask = alpha <= 0
     alpha_masked = np.ma.MaskedArray(alpha, alpha_mask)
     summation = np.zeros((X.shape[0]))
-    for n in range(0, d):
-        summation += np.ma.dot(np.multiply(y_train, K(X_train, X)), alpha_masked)
+    print summation.shape
+    kernel = K(X, X_train.T)
+    new_alpha = (alpha_masked.T * y_train).T
+    print kernel.shape
+    print new_alpha.shape
+    print np.dot(kernel, new_alpha).shape
+    summation += np.dot(kernel, new_alpha).flatten()
     summation += b
     err = np.sign(summation) != y
+    print np.sign(summation)
+    print y
     e = np.sum(err)
     final_e = e / N
     return final_e
