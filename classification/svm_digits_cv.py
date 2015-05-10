@@ -48,14 +48,7 @@ def ecv(X, Y, C):
         X_cv = np.concatenate((X[:i], X[i + 1:]))
         Y_cv = np.concatenate((Y[:i], Y[i + 1:]))
         alpha, b = svm.train_svm_kernel(X_cv, Y_cv, C, K)
-        d = alpha.shape[0]
-        summation = 0
-        for n in range(0, d):
-            if alpha[n] > 0:
-                summation += (alpha[n] * Y_cv[n] * K(X_cv[n], x_out))
-        summation += b
-        if sign(summation) != y_out:
-            err += 1.0
+        err += svm.error(x_out, y_out, X_cv, Y_cv, alpha, b, K)
     end = time.clock()
     elapsed = end - start
     print("C = %r finished in %r seconds" % (C, elapsed,))

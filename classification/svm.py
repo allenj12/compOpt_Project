@@ -70,7 +70,7 @@ def construct_alpha_constraints(y, C):
 
 def train_svm_kernel(X, y, C, K):
     solvers.options['show_progress'] = False
-    N = y.shape[0]
+    N = np.array([y.shape[0]])
     G = matrix(construct_G(X, y, K))
     #print("Constructed G")
     ones = matrix(-1.0, (N, 1))
@@ -122,3 +122,18 @@ def error(X, y, X_train, y_train, alpha, b, K):
     e = np.sum(err)
     final_e = e / N
     return final_e
+
+
+def ecv(X, Y, K, C):
+    #print("Starting C = %r" % (C,))
+    N = Y.shape[0]
+    err = 0.0
+    step = N / 10
+    for i in range(0, N, step):
+        x_out = X[i:i + step]
+        y_out = Y[i:i + step]
+        X_cv = np.concatenate((X[:i], X[i + step:]))
+        Y_cv = np.concatenate((Y[:i], Y[i + step:]))
+        alpha, b = train_svm_kernel(X_cv, Y_cv, C, K)
+        err += error(x_out, y_out, X_cv, Y_cv, alpha, b, K)
+    return err / N
