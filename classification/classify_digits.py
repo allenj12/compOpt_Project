@@ -1,6 +1,6 @@
 import neurolab as nl
 import numpy as np
-from classification import svm
+import svm
 import functools
 from multiprocessing import Pool, cpu_count
 import random
@@ -11,10 +11,10 @@ def kernel(xm, xn):
 
 random.seed()
 train_num = 500
-net = nl.load("features/ann80.net")
+net = nl.load("../features/ann80.net")
 print("Loaded NN")
 
-all_data = np.loadtxt("combinedData.txt")
+all_data = np.loadtxt("../combinedData.txt")
 #index_list = range(0, all_data.shape[0])
 #train_list = random.sample(index_list, train_num)
 #test_list = [x for x in index_list if x not in train_list]

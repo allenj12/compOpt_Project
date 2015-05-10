@@ -128,7 +128,8 @@ def ecv(X, Y, K, C):
     #print("Starting C = %r" % (C,))
     N = Y.shape[0]
     err = 0.0
-    step = N / 10
+    k_folds = 10
+    step = N / k_folds
     for i in range(0, N, step):
         x_out = X[i:i + step]
         y_out = Y[i:i + step]
@@ -136,4 +137,4 @@ def ecv(X, Y, K, C):
         Y_cv = np.concatenate((Y[:i], Y[i + step:]))
         alpha, b = train_svm_kernel(X_cv, Y_cv, C, K)
         err += error(x_out, y_out, X_cv, Y_cv, alpha, b, K)
-    return err / N
+    return err / k_folds
